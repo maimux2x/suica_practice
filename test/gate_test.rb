@@ -1,6 +1,7 @@
 require 'minitest/autorun'
 require_relative '../lib/gate'
 require_relative '../lib/ticket'
+require_relative '../lib/suica'
 
 class GateTest < Minitest::Test
   def setup
@@ -31,5 +32,20 @@ class GateTest < Minitest::Test
     ticket = Ticket.new(160)
     @juso.enter(ticket)
     assert @mikuni.exit(ticket)
+  end
+
+  def test_umeda_to_juso_by_suica
+    suica = Suica.new(1000)
+    @umeda.enter_by_suica(suica)
+    assert @juso.exit_by_suica(suica)
+    assert_equal 840, suica.balance
+  end
+  
+  def test_umeda_to_juso_by_suica_when_balance_is_100
+    suica = Suica.new(100)
+    @umeda.enter_by_suica(suica)
+    refute @juso.exit_by_suica(suica)
+    assert_equal 100, suica.balance
+
   end
 end

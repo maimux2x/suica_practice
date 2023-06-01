@@ -14,6 +14,16 @@ class Gate
     fare = calc_fare(ticket)
     fare <= ticket.fare
   end
+  
+  def enter_by_suica(suica)
+    suica.stamp(@name)
+  end
+  
+  def exit_by_suica(suica)
+    fare = calc_fare(suica)
+  
+    suica.balance -= fare
+  end
 
   def calc_fare(ticket)
     from = STATIONS.index(ticket.stamped_at)
