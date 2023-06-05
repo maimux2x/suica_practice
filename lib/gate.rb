@@ -16,13 +16,17 @@ class Gate
   end
   
   def enter_by_suica(suica)
-    suica.stamp(@name)
+    if suica.balance > 0
+      suica.stamp(@name)
+    else
+      false
+    end
   end
   
   def exit_by_suica(suica)
     fare = calc_fare(suica)
   
-    suica.balance -= fare
+    suica.discharge(fare)
   end
 
   def calc_fare(ticket)
